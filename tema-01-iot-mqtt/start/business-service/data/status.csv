@@ -1,0 +1,94 @@
+deviceId;timestamp;text
+check-a-8938;1792072950580;OK STATUS interval=2000 threshold=28.000
+check-b-8938;1792072950801;OK STATUS interval=2000 threshold=28.000
+check-a-8938;1792072950973;OK SET_THRESHOLD 100000.0
+check-a-8938;1792072951142;OK SET_INTERVAL 1000
+check-a-8938;1792072958562;OK STATUS interval=1000 threshold=100000.000
+check-b-8938;1792072958727;OK STATUS interval=2000 threshold=28.000
+check-a-8938;1792072958891;ERROR parametru numeric invalid!
+check-a-8938;1792072959061;ERROR intervalul trebuie sa fie pozitiv!
+check-a-8938;1792072959237;ERROR intervalul trebuie sa fie pozitiv!
+check-a-8938;1792072959405;ERROR parametru numeric invalid!
+check-a-8938;1792072959631;ERROR pragul trebuie sa fie un numar finit
+check-a-8938;1792072959798;ERROR pragul trebuie sa fie un numar finit
+check-a-8938;1792072959956;ERROR comanda necunoscuta: ABC
+check-a-8938;1792072960135;ERROR format: SET_INTERVAL <ms>
+check-a-8938;1792072960303;ERROR format: SET_THRESHOLD <valoare>
+check-a-8938;1792072960528;ERROR format: RESET
+check-a-8938;1792072960691;ERROR format: STATUS
+check-a-8938;1792072960880;ERROR empty command
+check-a-8938;1792072961034;OK STATUS interval=1000 threshold=100000.000
+check-a-8938;1792072961210;OK SET_THRESHOLD -100.0
+check-a-8938;1792072972644;OK SET_THRESHOLD 28.0
+check-a-8938;1792072972910;OK RESET
+check-a-8938;1792072973120;OK STATUS interval=1000 threshold=28.000
+device-1;1792073463075;OK STATUS interval=2000 threshold=28.000
+device-2;1792073463243;OK STATUS interval=2000 threshold=28.000
+device-1;1792073463407;OK SET_THRESHOLD 100000.0
+device-1;1792073463578;OK SET_INTERVAL 1000
+device-1;1792073471035;OK STATUS interval=1000 threshold=100000.000
+device-2;1792073471167;OK STATUS interval=2000 threshold=28.000
+device-1;1792073471328;ERROR parametru numeric invalid!
+device-1;1792073471488;ERROR intervalul trebuie sa fie pozitiv!
+device-1;1792073471652;ERROR intervalul trebuie sa fie pozitiv!
+device-1;1792073471816;ERROR parametru numeric invalid!
+device-1;1792073472027;ERROR pragul trebuie sa fie un numar finit
+device-1;1792073472190;ERROR pragul trebuie sa fie un numar finit
+device-1;1792073472339;ERROR comanda necunoscuta: ABC
+device-1;1792073472499;ERROR format: SET_INTERVAL <ms>
+device-1;1792073472660;ERROR format: SET_THRESHOLD <valoare>
+device-1;1792073472823;ERROR format: RESET
+device-1;1792073473026;ERROR format: STATUS
+device-1;1792073473168;ERROR empty command
+device-1;1792073473307;OK STATUS interval=1000 threshold=100000.000
+device-1;1792073473477;OK SET_THRESHOLD -100.0
+device-1;1792073486085;OK SET_THRESHOLD 28.0
+device-1;1792073486249;OK RESET
+device-1;1792073486408;OK STATUS interval=1000 threshold=28.000
+device-1;1792073487125;ERROR parametru numeric invalid!
+device-1;1792073487284;ERROR parametru numeric invalid!
+device-1;1792073487443;ERROR pragul trebuie sa fie un numar finit
+device-1;1792073487602;ERROR pragul trebuie sa fie un numar finit
+device-1;1792073487763;ERROR parametru numeric invalid!
+device-1;1792073487928;ERROR format: SET_THRESHOLD <valoare>
+device-1;1792073488066;OK STATUS interval=1000 threshold=28.000
+device-1;1792073488208;OK SET_THRESHOLD 100.0
+device-1;1792073488357;OK STATUS interval=1000 threshold=100.000
+device-1;1792073488518;OK SET_INTERVAL 500
+device-1;1792073492035;OK SET_INTERVAL 1500
+device-1;1792073499130;OK SET_INTERVAL 1000
+device-1;1792073506040;OK SET_INTERVAL 500
+device-1;1792073506087;OK SET_THRESHOLD 26.5
+device-1;1792073506123;OK STATUS interval=500 threshold=26.500
+device-1;1792073506167;OK SET_INTERVAL 1500
+device-1;1792073506206;OK SET_THRESHOLD 28.0
+device-1;1792073506246;OK STATUS interval=1500 threshold=28.000
+device-1;1792073506292;OK RESET
+device-1;1792073506441;OK STATUS interval=1500 threshold=28.000
+device-2;1792073506662;OK STATUS interval=2000 threshold=28.000
+device-1;1792073506840;OK SET_INTERVAL 500
+device-2;1792073507039;OK SET_INTERVAL 1500
+device-1;1792073507195;OK SET_THRESHOLD -100.0
+device-2;1792073507357;OK SET_THRESHOLD -100.0
+device-1;1792073517581;OK STATUS interval=500 threshold=-100.000
+device-2;1792073517741;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073527949;OK STATUS interval=500 threshold=-100.000
+device-2;1792073528127;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073538339;OK STATUS interval=500 threshold=-100.000
+device-2;1792073538510;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073548642;OK STATUS interval=500 threshold=-100.000
+device-2;1792073548800;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073558961;OK STATUS interval=500 threshold=-100.000
+device-2;1792073559167;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073569418;OK STATUS interval=500 threshold=-100.000
+device-2;1792073569619;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073579855;OK STATUS interval=500 threshold=-100.000
+device-2;1792073580038;OK STATUS interval=1500 threshold=-100.000
+device-1;1792073580196;OK SET_INTERVAL 2000
+device-1;1792073580358;OK SET_THRESHOLD 28.0
+device-1;1792073580541;OK RESET
+device-1;1792073580686;OK STATUS interval=2000 threshold=28.000
+device-2;1792073580847;OK SET_INTERVAL 2000
+device-2;1792073580985;OK SET_THRESHOLD 28.0
+device-2;1792073581134;OK RESET
+device-2;1792073581297;OK STATUS interval=2000 threshold=28.000

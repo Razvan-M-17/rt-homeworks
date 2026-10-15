@@ -37,14 +37,104 @@ public class AperiodicCommandTask implements Runnable {
 
     @Override
     public void run() {
-        // TODO 3: implementați taskul aperiodic:
-        //   - preluați comenzile din coadă: commands.take()
-        //   - separați numele comenzii de parametru: command.split(" ")
-        //   - executați comanda (periodic.setPeriodMs(...), sensor.reset() etc.)
-        //   - publicați confirmarea pe Config.statusTopic(deviceId)
-        //   - o comandă necunoscută sau un parametru invalid nu trebuie să
-        //     oprească taskul: publicați "ERROR <motiv>"
-        //
-        // Vezi exemplul exemple/01-taskuri/.../AperiodicTaskExample.java
+        while (!Thread.currentThread().isInterrupted()){
+            try {
+                String command = commands.take().trim();
+
+                String[] parts = command.split("\\s+");
+
+                if (parts.length == 0 || parts[0].isBlank()){
+                    publishStatus("ERROR empty command");
+                    continue;
+                }
+
+                String commandName = parts[0];
+
+                switch (commandName) {
+                    case "SET_INTERVAL":
+                        if (parts.length != 2) {
+                            publishStatus("ERROR format: SET_INTERVAL <ms>");
+                            continue;
+                        }
+
+                        long interval = Long.parseLong(parts[1]);
+
+                        if (interval <= 0) {
+                            publishStatus("ERROR intervalul trebuie sa fie pozitiv!");
+                            continue;
+                        }
+
+                        periodic.setPeriodMs(interval);
+                        publishStatus("OK SET_INTERVAL " + interval);
+                        break;
+
+                    case "SET_THRESHOLD":
+                        if (parts.length != 2) {
+                            publishStatus("ERROR format: SET_THRESHOLD <valoare>");
+                            continue;
+                        }
+
+                        double threshold = Double.parseDouble(parts[1]);
+
+                        if (!Double.isFinite(threshold)){
+                            publishStatus("ERROR pragul trebuie sa fie un numar finit");
+                            continue;
+                        }
+
+                        periodic.setThreshold(threshold);
+                        publishStatus("OK SET_THRESHOLD " + threshold);
+                        break;
+
+                    case "RESET":
+                        if (parts.length != 1){
+                            publishStatus("ERROR format: RESET");
+                            continue;
+                        }
+
+                        sensor.reset();
+                        publishStatus("OK RESET");
+                        break;
+
+                    case "STATUS":
+                        if (parts.length != 1){
+                            publishStatus("ERROR format: STATUS");
+                            continue;
+                        }
+
+                        publishStatus(
+                                String.format(
+                                        java.util.Locale.US,
+                                        "OK STATUS interval=%d threshold=%.3f",
+                                        periodic.getPeriodMs(),
+                                        periodic.getThreshold()
+                                )
+                        );
+                        break;
+
+                    default:
+                        publishStatus("ERROR comanda necunoscuta: " + commandName);
+                }
+            }catch (NumberFormatException e) {
+                publishStatus("ERROR parametru numeric invalid!");
+
+            }catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+    }
+
+    private void publishStatus(String text){
+        String message = String.format(
+                java.util.Locale.US,
+                "%s;%d;%s",
+                deviceId,
+                System.currentTimeMillis(),
+                text
+        );
+
+        mqtt.publish(Config.statusTopic(deviceId), message);
+
+        System.out.println("Status: " + message);
     }
 }

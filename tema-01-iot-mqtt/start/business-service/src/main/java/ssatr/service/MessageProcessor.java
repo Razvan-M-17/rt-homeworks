@@ -27,12 +27,78 @@ public class MessageProcessor implements Runnable {
 
     @Override
     public void run() {
-        // TODO 4: într-o buclă:
-        //   - preluați un mesaj: inbox.take()
-        //   - salvați mesajul în fișierul CSV: storage.append(kind, mesaj)
-        //     (CsvStorage este gata implementată)
-        //   - actualizați dashboard-ul, în funcție de kind
-        //   - alarmele și confirmările se afișează imediat în consolă
-        //   - un mesaj greșit (format invalid) nu trebuie să oprească thread-ul
+        while (!Thread.currentThread().isInterrupted()){
+            try{
+                String message = inbox.take();
+
+                storage.append(kind, message);
+                processMessage(message);
+            } catch (Exception e) {
+                System.out.println(
+                        "Mesaj invalid: " + kind + ": " + e.getMessage()
+                );
+            }
+        }
+    }
+
+    private void processMessage(String message){
+        String[] parts = message.split(";", 4);
+
+        if (kind.equals("telemetry")){
+            if (parts.length != 3){
+                throw new IllegalArgumentException(
+                        "format telemetry invalid"
+                );
+            }
+
+            String deviceId = parts[0];
+            long timestamp = Long.parseLong(parts[1]);
+            double temperature = Double.parseDouble(parts[2]);
+
+            dashboard.updateTelemetry(
+                    deviceId,
+                    timestamp,
+                    temperature
+            );
+        } else if (kind.equals("alarm")){
+            if (parts.length != 4){
+                throw new IllegalArgumentException(
+                        "format alarm invalid"
+                );
+            }
+
+            String deviceId = parts[0];
+            long timestamp = Long.parseLong(parts[1]);
+            double temperature = Double.parseDouble(parts[2]);
+
+            dashboard.updateAlarm(
+                    deviceId,
+                    timestamp,
+                    temperature
+            );
+
+            System.out.println("[ALARM] " + message);
+
+        } else if (kind.equals("status")){
+            if (parts.length != 3) {
+                throw new IllegalArgumentException(
+                        "format status invalid"
+                );
+            }
+
+            String deviceId = parts[0];
+            long timestamp = Long.parseLong(parts[1]);
+
+            dashboard.updateStatus(
+                    deviceId,
+                    timestamp
+            );
+
+            System.out.println("[STATUS] " + message);
+        } else {
+            throw new IllegalArgumentException(
+                    "tip necunoscut: " + kind
+            );
+        }
     }
 }

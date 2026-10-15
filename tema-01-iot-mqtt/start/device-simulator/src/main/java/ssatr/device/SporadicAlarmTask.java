@@ -19,23 +19,55 @@ public class SporadicAlarmTask implements Runnable {
     private final MqttConnection mqtt;
     private final BlockingQueue<Double> alarmEvents;
 
-    public SporadicAlarmTask(String deviceId, MqttConnection mqtt, BlockingQueue<Double> alarmEvents) {
+    private final PeriodicTelemetryTask periodic;
+
+    public SporadicAlarmTask(String deviceId, MqttConnection mqtt, BlockingQueue<Double> alarmEvents, PeriodicTelemetryTask periodic) {
         this.deviceId = deviceId;
         this.mqtt = mqtt;
         this.alarmEvents = alarmEvents;
+
+        this.periodic = periodic;
     }
 
     @Override
     public void run() {
-        // TODO 2: implementați taskul sporadic:
-        //   - așteptați un eveniment: alarmEvents.take()
-        //   - dacă de la ultima eliberare au trecut mai puțin de
-        //     MIN_INTERARRIVAL_MS, respingeți evenimentul (afișați un mesaj)
-        //   - altfel publicați pe Config.alarmTopic(deviceId) mesajul
-        //     "deviceId;timestamp;temperatura;prag"
-        //     (pragul curent poate fi transmis împreună cu temperatura sau
-        //      citit din PeriodicTelemetryTask; alegeți și justificați în raport)
-        //
-        // Vezi exemplul exemple/01-taskuri/.../SporadicTaskExample.java
+        long lastAlarmTime = 0;
+
+        while (!Thread.currentThread().isInterrupted()){
+            try {
+                double temperature = alarmEvents.take();
+
+                long now = System.currentTimeMillis();
+                long elapsed = now - lastAlarmTime;
+
+                if (lastAlarmTime != 0 && elapsed <MIN_INTERARRIVAL_MS){
+                    System.out.println(
+                            "Alarma respinsa: " + deviceId
+                            + " : interval prea mic (" + elapsed + " ms)"
+                    );
+                    continue;
+                }
+
+                double threshold = periodic.getThreshold();
+
+                String message = String.format(
+                        java.util.Locale.US,
+                        "%s;%d;%.2f;%.3f",
+                        deviceId,
+                        now,
+                        temperature,
+                        threshold
+                );
+
+                mqtt.publish(Config.alarmTopic(deviceId), message);
+
+                lastAlarmTime = now;
+
+                System.out.println("Alarma: " + message);
+            } catch (InterruptedException e){
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
     }
 }

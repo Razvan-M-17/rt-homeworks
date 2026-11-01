@@ -26,13 +26,43 @@ public class MessageProcessor implements Runnable {
     }
 
     @Override
-    public void run() {
-        // TODO 4: într-o buclă:
-        //   - preluați un mesaj: inbox.take()
-        //   - salvați mesajul în fișierul CSV: storage.append(kind, mesaj)
-        //     (CsvStorage este gata implementată)
-        //   - actualizați dashboard-ul, în funcție de kind
-        //   - alarmele și confirmările se afișează imediat în consolă
-        //   - un mesaj greșit (format invalid) nu trebuie să oprească thread-ul
+public void run() {
+    while (!Thread.currentThread().isInterrupted()) {
+        try {
+            String message = inbox.take();
+            storage.append(kind, message);
+            processMessage(message);
+        } catch (Exception e) {
+            System.out.println("Mesaj invalid: " + kind + ": " + e.getMessage());
+        }
     }
+}
+
+private void processMessage(String message) {
+    String[] parts = message.split(";", 4);
+
+    if (kind.equals("telemetry")) {
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("format telemetry invalid");
+        }
+        dashboard.updateTelemetry(parts[0], Long.parseLong(parts[1]), Double.parseDouble(parts[2]));
+
+    } else if (kind.equals("alarm")) {
+        if (parts.length != 4) {
+            throw new IllegalArgumentException("format alarm invalid");
+        }
+        dashboard.updateAlarm(parts[0], Long.parseLong(parts[1]), Double.parseDouble(parts[2]));
+        System.out.println("[ALARM] " + message);
+
+    } else if (kind.equals("status")) {
+        if (parts.length != 3) {
+            throw new IllegalArgumentException("format status invalid");
+        }
+        dashboard.updateStatus(parts[0], Long.parseLong(parts[1]));
+        System.out.println("[STATUS] " + message);
+
+    } else {
+        throw new IllegalArgumentException("tip necunoscut: " + kind);
+    }
+}
 }
